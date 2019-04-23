@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col">
+      <h3>
+        <a href="https://www.osom.com/" target="_blank">Ösom</a>
+          <small class="text-muted">Ruby developer</small>
+      </h3>
+      <footer class="blockquote-footer">May 2017 &rarr; <cite title="2 years">2 years</cite></footer>
+      <span class="badge badge-pill badge-tech">ruby</span>
+      <span class="badge badge-pill badge-tech">go</span>
+      <span class="badge badge-pill badge-tech">elixir</span>
+      <span class="badge badge-pill badge-tech">kubernetes</span>
+      <span class="badge badge-pill badge-tech">ruby-on-rails</span>
+      <span class="badge badge-pill badge-tech">redis</span>
+      <span class="badge badge-pill badge-tech">postgresql</span>
+      <span class="badge badge-pill badge-tech">rabbitmq</span>
+      <span class="badge badge-pill badge-tech">mysql</span>
+      <p></p>
+      <div class="row">
+        <div class="col-md-7 col-lg-9">
+          <p class="lead">
+            <strong>Ösom</strong> is one of the biggest online clothing retailers in México.
+          </p>
+          <h4>Amazon's MWS integration</h4>
+          <p>
+            By 2017 Amazon started offering fulfillment services in México, so the company took advantage of this services and moved all the inventory to Amazon's warehouse. We integrated their MWS (Marketplace Web Service) into our back office system. This included stock/inventory management, order fulfillment, product management, sales orders creation, etc.
+          </p>
+          <p>
+            We created a series of services in <abbr title="Ruby">Ruby</abbr> and <abbr title="PHP">PHP</abbr> for consuming their API. These services poll information from Amazon periodically to update our back office system and NetSuite WMS.
+          </p>
+          <p>
+            The goal was that for the commercial department this integration were completely transparent, which we did.
+          </p>
+          <p class="text-right">
+            <a class="btn btn-primary" href="/work/osom/amazon">Learn more about Amazon's MWS integration</a>
+          </p>
+        </div>
+        <div class="col-md-5 col-lg-3">
+          <div class="card">
+            <img src="/assets/images/osom.jpg" class="img-fluid card-img-top" alt="Ugly Sweater Day">
+            <div class="card-body">
+              <p class="card-text">Ugly sweater day at Ösom.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h4>Shopify frontend</h4>
+          <p>
+            Later on we decided to get rid of our frontend system and use Shopify as our customer facing interface.
+          </p>
+          <p>
+            Shopify has already a well structured sharding strategy for supporting millions of requests so we decided that it was our next move to let Shopify to serve the customers.
+          </p>
+          <p>
+            For this we created some services between Shopify and our backend systems. Although Shopify became our customer facing system, this wasn't the only channel we offered our products so at the end, all the data needed to converge in a single source of true: NetSuite's WMS.
+          </p>
+          <p class="text-right">
+            <a class="btn btn-primary" href="/work/osom/shopify">Learn more about Shopify integration</a>
+          </p>
+        </div>
+      </div>
+  </div>
+</div>
+<hr>

@@ -1,0 +1,141 @@
+{{define "content"}}
+<br>
+<div class="row">
+  <div class="col">
+    <h3>
+      Ösom
+      <small class="text-muted">Integration with Shopify</small>
+    </h3>
+    <p>
+      This is a 10000 feet overview of the implementation process for using Shopify as a frontend. Some components might be omitted and the names changed, but the main idea is held.
+    </p>
+    <p>
+      In order to reduce costs and avoid the instantiation of multiple virtual servers during the big sale seasons, we decided to delegate the frontend of the stores to a third party service: <strong>Shopify</strong>.
+    </p>
+    <p>
+      For this, we needed to keep in sync our catalog, inventory and orders with Shopify. Even though we used Shopify as our main distribution channel, we kept sending our catalog to different channels.
+    </p>
+    <h4>Taking advantage of the so called microservices</h4>
+    <p>
+      First we created a series of microservices using <strong>Go</strong>, abstracting the common functionality for all the services in a common library:
+    </p>
+    <table class="table table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th>Package</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Configuration</td>
+          <td>Access configuration settings for different services.</td>
+        </tr>
+        <tr>
+          <td>Database access</td>
+          <td>Instantiate database access in a simple and standarized way, using connection names and connection pools.</td>
+        </tr>
+        <tr>
+          <td>Key/value storage</td>
+          <td>Use different key/value storage backends: Redis and Consul</td>
+        </tr>
+        <tr>
+          <td>Hashing</td>
+          <td>Implementation of different hashing algorithms: BCrypt, Argon2, HMAC, RSA, etc. to generate authentication keys.</td>
+        </tr>
+        <tr>
+          <td>Authentication</td>
+          <td>Implementation of JWT.</td>
+        </tr>
+        <tr>
+          <td>Messaging queue</td>
+          <td>A single point for subscribing consumers to different messaging queue systems and publication.</td>
+        </tr>
+        <tr>
+          <td>Scheduling strategies</td>
+          <td>This was a package that implemented different strategies for scheduling repeating tasks: By time interval, by back-off, semaphore, worker pool, etc.</td>
+        </tr>
+      </tbody>
+    </table>
+    <h6>Services</h6>
+    <p>
+      The implementation of the services was almost the same:
+      <ul>
+        <li>Read the configuration</li>
+        <li>Expose the RPC methods</li>
+        <li>Instantiate any resource needed: database, key/value storage, service clients, consumers, publishers, etc.</li>
+        <li>Define the implementation handlers of the exposed services.</li>
+        <li>Depending on the third-party source, implement the specific behaviour.</li>
+        <li>Schedule tasks to run periodically.</li>
+      </ul>
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-7">
+    <figure class="figure">
+      <img alt="Shopify Services" src="/assets/images/osom/shopify-services.png" class="img-fluid img-thumbnail">
+      <figcaption class="figure-caption text-right">Abstract services and concrete implementations.</figcaption>
+    </figure>
+  </div>
+  <div class="col-md-5">
+    <p>
+      Once the concrete implementation for the third-party source is in place, the services are instantiated using Kubernetes's <code>ConfigMap</code>s, this way the service knows which implementation to perform.
+    </p>
+    <p>
+      In the case of the <strong>Orders fetcher</strong> service, it retrieves orders from some specific time and onwards, normalizes the data and pushes the message to a known <strong>RabbitMQ</strong> queue. For instance: <code>shopify_brand_order_updates</code>.
+    </p>
+    <p>
+      Knowing the queue name, the <strong>Orders processor</strong> service can subscribe to the queues it is configured to and process the messages.
+    </p>
+    <p>
+      The processing of an order might cause an inventory movement, which would then be retrieved by the <strong>Inventory fetcher</strong> service.
+    </p>
+    <p>
+      This service in turn publishes the quantities to a known queue, e.g.: <code>back_office_inventory_updates</code>.
+    </p>
+    <p>
+      Then, <strong>Inventory processor</strong> service might be listening to this specific queue and retrieve the information to publish it to the third-party service.
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <h4>Deployment</h4>
+    <p>
+      We created a <strong>Kubernetes</strong> cluster to deploy the services.
+    </p>
+    <p>
+      Using <strong>Helm</strong> templates we were able to speed up the configuration of the services, having a template for each service and a <code>values.yml</code> file for each third-party source.
+    </p>
+    <p>
+      Part of the template included a <strong>Horizontal Pod Scaler</strong> and number of starting replicas.
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <figure class="figure">
+      <img alt="Shopify Cluster" src="/assets/images/osom/shopify-cluster.png" class="img-fluid img-thumbnail">
+      <figcaption class="figure-caption text-right">Kubernetes cluster.</figcaption>
+    </figure>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <p>
+      By the time I left the company we ran multiple tests creating thousands of orders using dummy Shopify stores. The system worked as expected, showing almost no scaling of the Pods as it wasn't always required.
+    </p>
+    <h4>The devil is in the details</h4>
+    <p>
+      Having multiple instances of a service that performs a specific behaviour periodically can cause some data race conditions.
+    </p>
+    <p>
+      We faced this problem when added fetching capabilities to some services.
+    </p>
+    <p>
+      The solution was almost in place. As we used Consul as Service Discovery system, electing a leader was very easy. The <strong>Go Micro</strong> library already exposes a mechanism to perform a task on an elected leader. We switched the scheduling strategy to use Consul groups and Leader election.
+    </p>
+  </div>
+</div>
+{{end}}

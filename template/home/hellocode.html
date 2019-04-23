@@ -1,0 +1,92 @@
+<div class="row">
+  <div class="col">
+    <h3>
+      Hello Code
+      <small class="text-muted">Fullstack developer</small>
+    </h3>
+    <footer class="blockquote-footer">Jun 2014 &rarr; April 2015 - <cite title="11 months">11 months</cite></footer>
+    <span class="badge badge-pill badge-tech">ruby</span>
+    <span class="badge badge-pill badge-tech">javascript</span>
+    <span class="badge badge-pill badge-tech">angular</span>
+    <span class="badge badge-pill badge-tech">ruby-on-rails</span>
+    <span class="badge badge-pill badge-tech">postgresql</span>
+    <span class="badge badge-pill badge-tech">c#</span>
+    <p></p>
+    <p class="lead">
+      <strong>Hello Code</strong> was a start up based in Hermosillo, Sonora that was created by a couple of friends who invited me to work in special projects.
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <p>
+      The idea behind Hello Code was to build <a href="https://chopeo.mx/">Chopeo</a>. This product was then acquired by <strong>Dub5</strong>.
+    </p>
+    <h3>Special projects</h3>
+    <p>
+      At Hello Code while we all were building Chopeo, I was also in charge of special projects for keeping the company running.
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-7">
+    <div class="row">
+      <div class="col">
+        <h4>A barber shop</h4>
+        <p>
+          We built a system for managing barbers' schedules. The barber shop manager assigned the free spots for each barber depending the barbers' skill, availability and fee.
+        </p>
+        <p>
+          The first iteration's goal was to build a clean, simple and usable application optimized for the iPad. Later iterations included a customer facing section to automatically reserve a spot for a particular barber but this didn't complete.
+        </p>
+        <p class="text-right">
+          <a class="btn btn-primary" href="/work/hellocode/barber-shop">Learn more about Muscadin Barber Shop system</a>
+        </p>
+        <h4>Toven: Your restaurant. Live.</h4>
+        <p>
+          Hello Code was hired by <a href="http://toven.com.mx/" target="_blank">Toven</a> to build their product.
+        </p>
+        <p>
+          Toven has been the POS and restaurant support business for a long time. The wanted to build an application for their clients to have clear view of their business at all times.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card">
+      <img class="img-fluid card-img-top" alt="We were living the dream" src="/assets/images/hellocode.jpg"/>
+      <div class="card-body">
+        <p class="card-text">
+          We were living the dream.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <p>
+      The application was built in multiple parts:
+      <ul>
+        <li>A service living in the POS to retrieve information periodically.</li>
+        <li>A company administration area to build and assign different SQL queries for the service to run depending on the POS brand and version.</li>
+        <li>A customer administration area for the owners to create branches, manage royalty fees and users.</li>
+        <li>A subscription system for the customers to signup. We used <a href="https://www.conekta.com/" target="_blank">Conekta</a>.</li>
+        <li>Finally, a mobile application for the managers and branch owners to see the retrieved information in a meaningful way.</li>
+      </ul>
+    </p>
+    <p>
+      We built the Windows service using C# and taking advantage of Microsoft Installation Server in order to automatically update the clients. The service retrieved the SQL queries assigned to the POS version and make running locally. This payload included the frequency this queries needed to be run to avoid performance issues during peek hours.
+    </p>
+    <p>
+      No matter what POS system was installed (Pacific Soft, Soft Restaurant, Micros, etc), the retrieved information was presented in the mobile app (iOS and Android) uniformally.
+    </p>
+    <p>
+      This gave the restaurant owners a complete status of the branch's performance at anytime: traffic, cancelled tickets, refunds, etc.
+    </p>
+    <p class="text-right">
+      <a class="btn btn-primary" href="/work/hellocode/toven">Learn more about Toven</a>
+    </p>
+  </div>
+</div>
+<hr>

@@ -1,0 +1,65 @@
+{{define "content"}}
+<br>
+<div class="row">
+  <div class="col">
+    <h3>
+      Ösom
+      <small class="text-muted">Integration with Amazon's MWS</small>
+    </h3>
+    <p>
+      We used different techonlogies to accomplish this task. First, we needed to relate the Amazon's product identifiers with ours to know what to create and what to update. For this we used <strong>PostgreSQL</strong>. The product information hashes were kept in a <strong>Mongo</strong> database.
+    </p>
+    <p>
+      There were two teams involved in this process. One of the teams used <strong>PHP</strong> and the other team used <strong>Ruby</strong> with <strong>Sidekiq</strong> and <strong>Redis</strong> to manage the job scheduling.
+    </p>
+    <p>
+      Almost all Amazon's MWS endpoints work the same way. After signing the payload request (where needed) a <code>RequestID</code> is given to work with the requested information. Amazon uses a leaking bucket algorithm to rate-limit the requests made.
+    </p>
+    <p>
+      In order to overcome this behaviour we reduced the count of request attempts each time and backing the process off a bit to allow the cool down.
+    </p>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-4">
+    <h4>Inventory retrieval</h4>
+    <p>
+      Here is an example of the retrieval of the inventory status. This process was scheduled to run every minute.
+    </p>
+    <p>
+      Should any error might happened at this point, the process is backed off depending on the throttling limits.
+    </p>
+    <p>
+      The same process is applies for all the remaining operations (<em>ProductUpdate</em>, <em>OrderFulfillment</em>, etc).
+    </p>
+  </div>
+  <div class="col-md-8">
+    <figure class="figure">
+      <img src="/assets/images/osom/amazon-inventory.png" alt="Amazon - Inventory flow" class="img-fluid img-thumbnail">
+      <figcaption class="figure-caption text-right">Request inventory supply.</figcaption>
+    </figure>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-6">
+    <h4>Catalog updates</h4>
+    <p>
+      Here is an example of the catalog update flow.
+    </p>
+    <p>
+      There are different catalog payloads depending on the information we wanted to update: <em>Product</em>, <em>Pricing</em>, <em>Relations</em> etc. So the same flow needed to be run multiple times for different product information.
+    </p>
+    <p>
+      The products' information is managed by the commercial department and the process is completely transparent for them. We compared the created at and last updated at timestamps in order to select what to update. This fields are updated with simple database triggers. Other comparison processes were made when building the payload to decide which information to send. For this, we only keeped a hash of the field's content and run a map/reduce function to form the payload.
+    </p>
+  </div>
+  <div class="col-md-6">
+    <figure class="figure">
+      <img alt="Catalog update" src="/assets/images/osom/amazon-catalog.png"/ class="img-fluid img-thumbnail">
+      <figcaption class="figure-caption text-right">Catalog update.</figcaption>
+    </figure>
+  </div>
+</div>
+{{end}}

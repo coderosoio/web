@@ -29,7 +29,7 @@ func NewRouter(config *commonConfig.Config) (*gin.Engine, error) {
 	router.HTMLRender = renderer
 	router.StaticFS("/assets", http.Dir("static"))
 	router.StaticFile("/browserconfig.xml", "static/browserconfig.xml")
-	router.StaticFile("/apple-touch-icon.png", "static/images//apple-touch-icon.png")
+	router.StaticFile("/apple-touch-icon.png", "static/images/apple-touch-icon.png")
 	router.StaticFile("/apple-touch-icon-precomposed.png", "static/images/apple-touch-icon-precomposed.png")
 	router.StaticFile("/favicon.ico", "static/images/favicon.ico")
 

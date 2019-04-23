@@ -28,6 +28,7 @@ func NewRouter(config *commonConfig.Config) (*gin.Engine, error) {
 
 	router.HTMLRender = renderer
 	router.StaticFS("/assets", http.Dir("static"))
+	router.StaticFile("/browserconfig.xml", "static/browserconfig.xml")
 
 	homeHandler := NewHomeHandler(
 		Config(config),

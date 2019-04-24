@@ -23,26 +23,6 @@ func NewFileHandler(opts ...Option) *FileHandler {
 	}
 }
 
-func (h *FileHandler) Test(ctx *gin.Context) {
-	filename, err := filepath.Abs("static/saul_martinez-resume.docx")
-	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"error": err,
-		})
-		return
-	}
-	if _, err = os.Stat(filename); os.IsNotExist(err) {
-		ctx.AbortWithStatusJSON(http.StatusNotFound, gin.H{
-			"filename": filename,
-			"error": err,
-		})
-		return
-	}
-	ctx.JSON(http.StatusOK, gin.H{
-		"filename": filename,
-	})
-}
-
 // Download files.
 func (h *FileHandler) Download(ctx *gin.Context) {
 	var err error

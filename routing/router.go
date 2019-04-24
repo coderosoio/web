@@ -58,7 +58,6 @@ func NewRouter(config *commonConfig.Config) (*gin.Engine, error) {
 	{
 		file.GET("/:filename", fileHandler.Download)
 	}
-	router.GET("/test", fileHandler.Test)
 
 	return router, nil
 }

@@ -32,11 +32,15 @@ func NewRouter(config *commonConfig.Config) (*gin.Engine, error) {
 	router.StaticFile("/apple-touch-icon.png", "static/images/apple-touch-icon.png")
 	router.StaticFile("/apple-touch-icon-precomposed.png", "static/images/apple-touch-icon-precomposed.png")
 	router.StaticFile("/favicon.ico", "static/images/favicon.ico")
+	router.StaticFile("/Saul_Martínez-Resume.docx", "static/Saul_Martínez-Resume.docx")
 
 	homeHandler := NewHomeHandler(
 		Config(config),
 	)
 	workHandler := NewWorkHandler(
+		Config(config),
+	)
+	fileHandler := NewFileHandler(
 		Config(config),
 	)
 
@@ -49,6 +53,12 @@ func NewRouter(config *commonConfig.Config) (*gin.Engine, error) {
 	{
 		work.GET("/:company/:project", workHandler.Work)
 	}
+
+	file := router.Group("/download")
+	{
+		file.GET("/:filename", fileHandler.Download)
+	}
+	router.GET("/test", fileHandler.Test)
 
 	return router, nil
 }

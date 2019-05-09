@@ -1,0 +1,88 @@
+{{define "content"}}
+    <br>
+    <div class="row">
+        <div class="col">
+            <h3>
+                Robottle
+                <small class="text-muted">A simple IoT platform written in Go</small>
+            </h3>
+            <p>Robottle is a simple IoT platform created using microservices, messaging queues and a NoSQL database.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <figure class="figure">
+                <img src="/assets/images/robottle.png" alt="Robottle - IoT platform" class="img-fluid img-thumbnail">
+                <figcaption class="figure-caption text-right">Basic dashboard using device data.</figcaption>
+            </figure>
+        </div>
+        <div class="col-md-5">
+            <p>
+                Users can sign up and log in and start adding devices (Arduino, Raspberry Pi, etc).
+                Each device is assigned a device key and secret used to sign the request using a HMAC hash along with a <code>X-Device-Key</code> header to identify the device.
+                The device data (in JSON format) is sent to the <code>robottle_collector</code> service which enqueues the data to be processed by a consumer.
+                For now, this consumer only adds some fields to the payload and stores it in a NoSQL database (RethinkDB).
+            </p>
+            <p>
+                The <code>robottle_collector</code> service also exposes a stream server which can be used to read the data as it is processed.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <p>
+                The <code>robottle_frontend</code> is the main UI which uses web sockets to subscribe the user to the stream server. The data is filtered by sensor ID, each device can send data using different sensors (temperature, CPU load, location coordinates, etc).
+            </p>
+            <p>
+                All the RPC services, stream server and API gateway are written using <a href="https://github.com/micro/go-micro">Go Micro</a>. For the messaging system the system uses RabbitMQ and for storing the device data there's a RethinkDB database which is easier to setup for listening to live changes.
+            </p>
+            <p>
+                Initially the project used MongoDB for storing device data but in order to watch for live changes I needed to setup a MongoDB replication cluster and I didn't want to complicate the infrastructure at this time.
+            </p>
+        </div>
+        <div class="col-md-5">
+            <figure class="figure">
+                <img src="/assets/images/robottle-diagram.png" alt="Robottle - IoT platform" class="img-fluid img-thumbnail">
+                <figcaption class="figure-caption text-right">Service communication.</figcaption>
+            </figure>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4>Common package</h4>
+            <p>All services use common functionality like database access, connection to other services, reading configuration, etc.</p>
+            <p>The <a href="https://gitlab.com/robottle/robottle_common" target="_blank"><code>robottle_common</code></a> package contains these functionality to avoid code duplication.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4>Account service</h4>
+            <p>The <a href="https://gitlab.com/robottle/robottle_account" target="_blank"><code>robottle_account</code></a> service handles users and authentication. It exposes functions to create, update and authenticate a user. Password can be generated using BCrypt or Argon2. This can be changed in the configuration file.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4>Device service</h4>
+            <p>
+                The <a href="https://gitlab.com/robottle/robottle_device" target="_blank"><code>robottle_device</code></a> is used to manage devices. It generates device key and secret hashes to sign the requests.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4>API</h4>
+            <p>Each service exposes a RESTful API which is then exposed by the API gateway. This API is delivered as a single binary in a Docker image.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4>Frontend <small>WIP</small></h4>
+            <p>The <a href="https://gitlab.com/robottle/robottle_frontend" target="_blank"><code>robottle_frontend</code></a> is a React application where users can sign up, create devices and build dashboards using the data sent by the devices.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>You can read the source code on <a href="https://gitlab.com/robottle" target="_blank">GitLab</a>.</p>
+        </div>
+    </div>
+{{end}}

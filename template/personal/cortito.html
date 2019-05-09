@@ -1,0 +1,56 @@
+{{define "content"}}
+<br>
+<div class="row">
+    <div class="col">
+        <h3>
+            Cortito
+            <small class="text-muted">A simple URL shortener</small>
+        </h3>
+        <p>This is a simple URL shortener created using microservices.</p>
+        <p>There are two simple micro services using <a href="https://github.com/micro/go-micro" target="_blank">Go Micro</a>.  All microservices use Protocol Buffers for communication. The services are exposed using an API gateway also using <a href="http://micro.mu/" target="_blank">Micro API</a>.</p>
+        <p>You can find the project implementation on <a href="https://github.com/coderosoio/cortito" target="_blank">Github</a>.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h4>Common package</h4>
+        <p>All services use common functionality like database access, connection to other services, reading configuration, etc.</p>
+        <p>The <a href="https://github.com/coderosoio/cortito/blob/development/common" target="_blank"><code>common</code></a> package contains these functionality to avoid code duplication.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h4>Account service</h4>
+        <p>The <a href="https://github.com/coderosoio/cortito/blob/development/account" target="_blank"><code>account</code></a> service handles users and authentication. It exposes functions to create, update and authenticate a user. Password can be generated using BCrypt or Argon2. This can be changed in the configuration file.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h4>Shortener service</h4>
+        <p>The <a href="https://github.com/coderosoio/cortito/blob/development/shortener" target="_blank"><code>shortener</code></a> service is responsible for creating and resolving shortened links. These links are created per-user, but everyone can follow the link.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h4>API</h4>
+        <p>The <a href="https://github.com/coderosoio/cortito/blob/development/api" target="_blank"><code>api</code></a> interfaces with the services through a single endpoint. The Micro API gateway is responsible for selecting the node each request is going to be handled by. This is useful in a multi-node environment.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h4>Web endpoint</h4>
+        <p>The <a href="https://github.com/coderosoio/cortito/blob/development/web" target="_blank"><code>web</code></a> endpoint is responsible for resolving shortened URLs and redirect the user to the actual URL. When somebody hits a shortened link the visit for that link is increased.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h4>Frontend</h4>
+        <p>The <a href="https://github.com/coderosoio/cortito/blob/development/frontend" target="_blank"><code>frontend</code></a> is a React application where users can sign up, create links and see the usage of a particular link.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <p>You can read the source code on <a href="https://github.com/coderosoio/cortito" target="_blank">Github</a>.</p>
+    </div>
+</div>
+{{end}}
